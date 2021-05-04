@@ -1,0 +1,9 @@
+basePackage: com.leonardo.rocha
+imports:
+  - import: java.util.List
+relativePackage: AutoValue
+beanName: RoverList
+fields:
+  - fieldName: rovers
+    fieldType: List<Rover>
+    comma: false

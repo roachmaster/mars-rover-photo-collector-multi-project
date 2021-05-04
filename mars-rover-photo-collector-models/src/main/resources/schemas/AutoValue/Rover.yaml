@@ -1,0 +1,10 @@
+basePackage: com.leonardo.rocha
+relativePackage: AutoValue
+beanName: Rover
+fields:
+  - fieldName: id
+    fieldType: String
+    comma: true
+  - fieldName: name
+    fieldType: String
+    comma: false

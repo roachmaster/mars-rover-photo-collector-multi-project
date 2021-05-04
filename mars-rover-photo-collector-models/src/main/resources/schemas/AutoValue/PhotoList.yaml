@@ -1,0 +1,9 @@
+basePackage: com.leonardo.rocha
+imports:
+  - import: java.util.List
+relativePackage: AutoValue
+beanName: PhotoList
+fields:
+  - fieldName: photos
+    fieldType: List<Photo>
+    comma: false

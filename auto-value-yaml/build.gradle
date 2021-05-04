@@ -1,0 +1,72 @@
+// * * * * * * * * * * * *
+// Plugins
+// * * * * * * * * * * * *
+
+plugins {
+    id 'groovy'
+    id 'java-gradle-plugin'
+
+    // Publishing publicly
+    id 'com.gradle.plugin-publish' version '0.9.10'
+
+    // Publishing to Artifactory
+    id 'maven-publish'
+}
+
+// * * * * * * * * * * * *
+// Dependencies
+// * * * * * * * * * * * *
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile     gradleApi()
+    testCompile gradleTestKit()
+    testCompile 'junit:junit:4+'
+}
+
+// * * * * * * * * * * * *
+// Project configuration
+// * * * * * * * * * * * *
+
+project.description     = 'Demo plugin to use as a starting point for custom plugin development'
+project.group           = 'com.leonardo.rocha'
+project.version         = '0.1.0'
+
+project.ext.name        = 'demo'
+project.ext.pluginId    = 'com.leonardo.rocha.AutoValueYamlPlugin'
+//project.ext.scm         = 'scm:git@github.com:Praqma/gradle-plugin-bootstrap.git'
+//project.ext.url         = 'https://github.com/Praqma/gradle-plugin-bootstrap'
+
+// Configuration for: java-gradle-plugin
+gradlePlugin {
+    plugins {
+        demoPlugin {
+            id = project.pluginId
+            implementationClass = 'com.leonardo.rocha.AutoValueYamlPlugin'
+        }
+    }
+}
+
+
+publishing {
+    publications {
+        pluginPublication (MavenPublication) {
+            from        components.java
+            groupId     project.group
+            artifactId  project.name
+            version     project.version
+        }
+    }
+    repositories {
+        maven {
+            url mavenRepo
+            credentials {
+                username mavenUser
+                password mavenPassword
+            }
+        }
+    }
+}

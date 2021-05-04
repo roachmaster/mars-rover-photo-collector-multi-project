@@ -1,0 +1,21 @@
+basePackage: com.leonardo.rocha
+relativePackage: AutoValue
+beanName: Photo
+fields:
+  - fieldName: id
+    fieldType: String
+    comma: true
+  - fieldName: earthDate
+    fieldType: String
+    jsonProperty: earth_date
+    comma: true
+  - fieldName: imgSrc
+    fieldType: String
+    jsonProperty: img_src
+    comma: true
+  - fieldName: camera
+    fieldType: Camera
+    comma: true
+  - fieldName: rover
+    fieldType: Rover
+    comma: false

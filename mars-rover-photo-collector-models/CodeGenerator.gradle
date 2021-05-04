@@ -1,0 +1,124 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath("org.yaml:snakeyaml:1.17")
+        classpath('com.github.spullara.mustache.java:compiler:0.9.5')
+    }
+}
+
+import com.github.mustachejava.DefaultMustacheFactory
+import com.github.mustachejava.Mustache
+import com.github.mustachejava.MustacheFactory
+import org.yaml.snakeyaml.Yaml
+
+def templatesDir = "${projectDir}/src/main/resources/templates"
+def yamlDir = "${projectDir}/src/main/resources/schemas"
+
+
+
+task cleanGenDir(type:Delete) {
+    delete generatedDir
+    delete "${buildDir}/tmp"
+}
+
+task generateCode{
+    doFirst{
+        file(templatesDir).eachFile { fileName ->
+            def templateType = fileName.getName().split(/\./)[0]
+            def templateYamlDir = "${yamlDir}/${templateType}"
+            file(templateYamlDir).eachFile { yamlName ->
+               def pair = generateFile "${fileName.absolutePath}", "${yamlName.absolutePath}"
+               saveFile pair
+            }
+        }
+    }
+}
+
+project.tasks.generateCode.dependsOn cleanGenDir
+project.tasks.compileJava.dependsOn generateCode
+
+def generateFile(def templateFile, def yamlFile){
+    Map<String, Object> map = convertYamlToMap(yamlFile)
+    Mustache mustache = compileTemplate(templateFile);
+    def generatedString = createTemplateInstance(mustache, map)
+    def canonicalName = getGeneratedClassName(map)
+    return new Tuple2(canonicalName, generatedString)
+}
+
+def convertYamlToMap(def yamlFile){
+    InputStream input = new FileInputStream(new File(yamlFile));
+    Yaml yaml = new Yaml();
+    return (Map<String, Object>) yaml.load(input);
+}
+
+def compileTemplate(def templateFile){
+    MustacheFactory mf = new DefaultMustacheFactory();
+    File f = new File(templateFile);
+    return mf.compile(new InputStreamReader(new FileInputStream(f),"UTF-8"),f.getName());
+}
+
+def createTemplateInstance(def mustache, def yamlInfo){
+    StringWriter writer = new StringWriter();
+    mustache.execute(writer, yamlInfo).flush();
+    return writer.toString()
+}
+
+def getGeneratedClassName(def map){
+    return "${map.get('basePackage')}.${map.get('relativePackage')}.${map.get('beanName')}";
+}
+
+def saveFile(def tuple){
+    def autoValueDir = "${buildDir}/classes/java/main"
+    def path = ((GString) tuple[0]).replace(".","/")
+    def fileName = path.split(/\//).last()
+    def fileDir =  file("${generatedDir}/${(path.split(/\//) - fileName).join('/')}")
+    String genCode = tuple[1]
+    createDir(fileDir)
+    file("${fileDir}/${fileName}.java").text = genCode
+    saveGenFileInfo("${autoValueDir}/${(path.split(/\//) - fileName).join('/')}", "AutoValue_${fileName}", "${fileDir}")
+}
+
+def saveGenFileInfo(def fileDir, def fileName, def dest) {
+    createDir("${buildDir}/tmp/")
+    updateFile("${buildDir}/tmp/AutoValueFile.txt", "${fileDir}/${fileName}.java,${dest}\n")
+    
+}
+
+def updateFile(def fileName, def fileContent){
+    def fileToBeUpdated = file(fileName)
+    if(!fileToBeUpdated.exists()){
+        fileToBeUpdated.text = fileContent
+    } else {
+        fileToBeUpdated.text += fileContent
+    }
+}
+
+def createDir(def dirName){
+    def fileDir = file(dirName)
+    if(!fileDir.exists()){
+        fileDir.mkdirs()
+    }
+}
+
+task moveAutoValueCode {
+    doFirst {
+        def autoValueFile = file("${buildDir}/tmp/AutoValueFile.txt")
+        def line
+        autoValueFile.withReader { reader ->
+            while ((line = reader.readLine()) != null) {
+                def lineSplit = line.split(',')
+                println "${lineSplit[0]} -> ${lineSplit[1]}"
+                ant.copy file: "${lineSplit[0]}",todir: "${lineSplit[1]}"
+            }
+        }
+    }
+}
+
+project.tasks.build.dependsOn moveAutoValueCode
+moveAutoValueCode.dependsOn project.tasks.compileJava
