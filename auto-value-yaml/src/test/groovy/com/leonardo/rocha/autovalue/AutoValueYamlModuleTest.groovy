@@ -46,12 +46,15 @@ class AutoValueYamlModuleTest {
     }
 
     @Test
-    public void helloWorld_standard() {
-        def result = gradle('helloWorld')
-        assert result.task(":helloWorld").outcome == SUCCESS
-        assert result.output.contains("Hello, world!")
+    public void generateCodePlugin_standard() {
+        def result = gradle('generateCodePlugin')
+        assert result.task(":generateCodePlugin").outcome == SUCCESS
+        println(result.task(":generateCodePlugin").outcome)
+        assert result.output.contains("generatecode/src/main/java")
+        assert result.output.contains("src/main/resources/templates")
+        assert result.output.contains("src/main/resources/schemas")
     }
-
+/*
     @Test
     public void helloWorld_alternative() {
         build_gradle << 'autovalueyaml.alternativeGreeting = "Howdy"'
@@ -107,4 +110,6 @@ class AutoValueYamlModuleTest {
         assert result.task(":badTask").outcome == FAILED
         assert result.output.contains("I can't let you do that, Starfox.")
     }
+
+   */
 }
