@@ -19,6 +19,7 @@ plugins {
     id 'java'
     id 'eclipse'
 }
+
 apply plugin:"com.leonardo.rocha.AutoValueYamlPlugin"
 project.ext.set("generatedDir","${buildDir}/generatecode/src/main/java")
 

@@ -20,8 +20,6 @@ import org.yaml.snakeyaml.Yaml
 def templatesDir = "${projectDir}/src/main/resources/templates"
 def yamlDir = "${projectDir}/src/main/resources/schemas"
 
-
-
 task cleanGenDir(type:Delete) {
     delete generatedDir
     delete "${buildDir}/tmp"
@@ -87,7 +85,6 @@ def saveFile(def tuple){
 def saveGenFileInfo(def fileDir, def fileName, def dest) {
     createDir("${buildDir}/tmp/")
     updateFile("${buildDir}/tmp/AutoValueFile.txt", "${fileDir}/${fileName}.java,${dest}\n")
-    
 }
 
 def updateFile(def fileName, def fileContent){
