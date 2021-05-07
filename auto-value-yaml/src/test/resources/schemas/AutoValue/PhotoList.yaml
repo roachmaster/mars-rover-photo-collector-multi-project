@@ -6,4 +6,3 @@ beanName: PhotoList
 fields:
   - fieldName: photos
     fieldType: List<Photo>
-    comma: false

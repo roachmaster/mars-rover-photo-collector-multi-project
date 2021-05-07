@@ -107,7 +107,14 @@ class AutoValueYamlModule {
     private static def convertYamlToMap(def yamlFile){
         InputStream input = new FileInputStream(new File(yamlFile));
         Yaml yaml = new Yaml();
-        return (Map<String, Object>) yaml.load(input);
+        def yamlMap = (Map<String, Object>) yaml.load(input);
+        def fieldList = yamlMap.get("fields")
+        fieldList.each {
+            it.put("comma", "true")
+        }
+        fieldList.last().put("comma", "false")
+        println fieldList
+        return yamlMap
     }
 
     private static def compileTemplate(def templateFile){

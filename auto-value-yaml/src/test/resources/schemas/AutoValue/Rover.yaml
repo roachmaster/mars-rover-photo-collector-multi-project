@@ -4,7 +4,5 @@ beanName: Rover
 fields:
   - fieldName: id
     fieldType: String
-    comma: true
   - fieldName: name
     fieldType: String
-    comma: false
