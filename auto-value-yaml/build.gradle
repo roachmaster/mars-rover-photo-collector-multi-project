@@ -25,6 +25,9 @@ dependencies {
     compile     gradleApi()
     testCompile gradleTestKit()
     testCompile 'junit:junit:4+'
+    compile("org.yaml:snakeyaml:1.17")
+    compile('com.github.spullara.mustache.java:compiler:0.9.5')
+    compile group: 'commons-io', name: 'commons-io', version: '2.5'
 }
 
 // * * * * * * * * * * * *

@@ -1,0 +1,14 @@
+basePackage: com.leonardo.rocha
+relativePackage: AutoValue
+beanName: Camera
+fields:
+  - fieldName: id
+    fieldType: String
+    comma: true
+  - fieldName: name
+    fieldType: String
+    comma: true
+  - fieldName: fullName
+    fieldType: String
+    jsonProperty: full_name
+    comma: false

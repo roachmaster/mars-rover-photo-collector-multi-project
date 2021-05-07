@@ -4,7 +4,7 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.*
 import org.junit.rules.TemporaryFolder
-
+import org.apache.commons.io.FileUtils
 import static org.gradle.testkit.runner.TaskOutcome.*
 
 /**
@@ -23,6 +23,23 @@ class AutoValueYamlModuleTest {
         // Prepare build.gradle
         build_gradle = testProjectDir.newFile('build.gradle')
         build_gradle << 'plugins { id "com.leonardo.rocha.AutoValueYamlPlugin" }\n'
+        def templatesDir = testProjectDir.newFolder("src/main/resources/templates")
+        def yamlDir = testProjectDir.newFolder("src/main/resources/schemas")
+        copyResourcesToTestDir(templatesDir, yamlDir)
+    }
+
+    private void copyResourcesToTestDir(def templatesDir, def yamlDir){
+        ClassLoader classLoader = getClass().getClassLoader();
+        def testTemplatesDir = new File(classLoader.getResource("templates").getFile());
+        def testYamlDir = new File(classLoader.getResource("schemas").getFile());
+        System.out.println(testTemplatesDir.getAbsolutePath());
+        System.out.println(testYamlDir.getAbsolutePath());
+        try {
+            FileUtils.copyDirectory(testTemplatesDir, templatesDir);
+            FileUtils.copyDirectory(testYamlDir, yamlDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -49,8 +66,7 @@ class AutoValueYamlModuleTest {
     public void generateCodePlugin_standard() {
         def result = gradle('generateCodePlugin')
         assert result.task(":generateCodePlugin").outcome == SUCCESS
-        println(result.task(":generateCodePlugin").outcome)
-        assert result.output.contains("generatecode/src/main/java")
+        println(result.output)
         assert result.output.contains("src/main/resources/templates")
         assert result.output.contains("src/main/resources/schemas")
     }

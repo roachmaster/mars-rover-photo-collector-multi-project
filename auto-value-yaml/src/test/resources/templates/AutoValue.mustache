@@ -1,0 +1,50 @@
+package {{basePackage}}.{{relativePackage}};
+
+import com.google.auto.value.AutoValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+{{#imports}}
+import {{{import}}};
+{{/imports}}
+
+@AutoValue
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonDeserialize(builder = AutoValue_{{beanName}}.Builder.class)
+public abstract class {{beanName}} {
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @AutoValue.Builder
+    @JsonPOJOBuilder(buildMethodName = "build", withPrefix = "")
+    public interface Builder {
+{{#fields}}
+        {{^jsonProperty}}@JsonProperty("{{{fieldName}}}"){{/jsonProperty}}{{#jsonProperty}}@JsonProperty("{{{jsonProperty}}}"){{/jsonProperty}}
+        Builder {{fieldName}}({{{fieldType}}} {{fieldName}});
+{{/fields}}
+        {{beanName}} build();
+    }
+
+    {{#fields}}
+    {{^jsonProperty}}@JsonProperty("{{{fieldName}}}"){{/jsonProperty}}{{#jsonProperty}}@JsonProperty("{{{jsonProperty}}}"){{/jsonProperty}}
+    public abstract {{{fieldType}}} {{fieldName}}();
+    {{/fields}}
+
+    public static Builder builder() {
+        return new AutoValue_{{beanName}}.Builder();
+    }
+
+    @JsonCreator
+    static {{beanName}} create(
+{{#fields}}
+            {{^jsonProperty}}@JsonProperty("{{{fieldName}}}"){{/jsonProperty}}{{#jsonProperty}}@JsonProperty("{{{jsonProperty}}}"){{/jsonProperty}} {{{fieldType}}} {{fieldName}}{{#comma}},{{/comma}}{{^comma}}){ {{/comma}}
+{{/fields}}
+
+        return builder()
+        {{#fields}}
+              .{{fieldName}}({{fieldName}})
+        {{/fields}}
+              .build();
+    }
+}
