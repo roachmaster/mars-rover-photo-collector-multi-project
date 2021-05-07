@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Jenkins-Workspace: fakeNumber
-Jenkins-Build: fakeNumber
-Start-Class: com.leonardo.rocha.MarsImageApp
-Spring-Boot-Classes: BOOT-INF/classes/
-Spring-Boot-Lib: BOOT-INF/lib/
-Spring-Boot-Version: 2.2.2.RELEASE
-Main-Class: org.springframework.boot.loader.JarLauncher
-
