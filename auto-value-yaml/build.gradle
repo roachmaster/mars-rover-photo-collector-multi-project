@@ -3,7 +3,6 @@
 // * * * * * * * * * * * *
 
 plugins {
-    id 'maven'
     id 'groovy'
     id 'java-gradle-plugin'
 
@@ -12,6 +11,7 @@ plugins {
 
     // Publishing to Artifactory
     id 'maven-publish'
+	id 'eclipse'
 }
 
 // * * * * * * * * * * * *
@@ -23,12 +23,13 @@ repositories {
 }
 
 dependencies {
-    compile     gradleApi()
-    testCompile gradleTestKit()
-    testCompile 'junit:junit:4+'
-    compile("org.yaml:snakeyaml:1.17")
-    compile('com.github.spullara.mustache.java:compiler:0.9.5')
-    compile group: 'commons-io', name: 'commons-io', version: '2.5'
+    implementation gradleApi()
+    testImplementation gradleTestKit()
+    testImplementation 'junit:junit:4+'
+    implementation("org.yaml:snakeyaml:1.17")
+    implementation('com.github.spullara.mustache.java:compiler:0.9.5')
+    implementation group: 'commons-io', name: 'commons-io', version: '2.5'
+    implementation 'org.codehaus.groovy:groovy-all:3.0.7'
 }
 
 // * * * * * * * * * * * *
@@ -41,7 +42,7 @@ project.version         = '0.1.0'
 
 project.ext.name        = 'auto-value-yaml'
 project.ext.pluginId    = 'com.leonardo.rocha.AutoValueYamlPlugin'
-
+sourceCompatibility = 1.8
 // Configuration for: java-gradle-plugin
 gradlePlugin {
     plugins {
@@ -51,7 +52,6 @@ gradlePlugin {
         }
     }
 }
-
 
 publishing {
     publications {
@@ -73,12 +73,16 @@ publishing {
     }
 }
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: mavenRepo) {
-                authentication(userName: mavenUser, password: mavenPassword)
-            }
-        }
-    }
+eclipse {
+	classpath {
+		defaultOutputDir = file("build")
+		file.whenMerged {
+			entries.each { entry ->
+				if(entry.kind == 'src' && entry.hasProperty('output')) {
+					entry.output = entry.output.replace('bin/', "build/classes/java/")
+				}
+			}
+		}
+	}
 }
+

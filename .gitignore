@@ -7,3 +7,6 @@ build/
 **/javaCompile/
 **/taskHistory/
 **/buildOutputCleanup/
+**/.project
+**/.settings/
+**/.classpath

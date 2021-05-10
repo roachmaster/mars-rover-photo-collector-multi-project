@@ -1,5 +1,5 @@
 plugins {
-    id 'maven'
+    id 'maven-publish'
     id 'java'
     id 'eclipse'
     id "com.leonardo.rocha.AutoValueYamlPlugin" version '0.1.0'
@@ -24,14 +24,10 @@ sourceCompatibility = 1.8
 ext {
     autoValueVersion = '1.7'
 }
-// * * * * * * * * * * * *
-// Project configuration
-// * * * * * * * * * * * *
 
-project.description     = 'Demo plugin to use as a starting point for custom plugin development'
+project.description     = 'Repo that creates the Models for the mars-rover app'
 project.group           = 'com.leonardo.rocha'
 project.version         = '0.1.0'
-
 project.ext.name        = 'mars-rover-photo-collector-models'
 
 sourceSets {
@@ -39,26 +35,17 @@ sourceSets {
         java {
             srcDirs generatedDir
             srcDirs 'src/main/java'
+			srcDirs "${buildDir}/generated/sources/annotationProcessor/java/main"
         }
     }
 }
 
 dependencies {
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.10.1'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.1'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.10.1'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.1'
 
-    compile "com.google.auto.value:auto-value-annotations:${autoValueVersion}"
+    implementation "com.google.auto.value:auto-value-annotations:${autoValueVersion}"
     annotationProcessor "com.google.auto.value:auto-value:${autoValueVersion}"
-}
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: mavenRepo) {
-                authentication(userName: mavenUser, password: mavenPassword)
-            }
-        }
-    }
 }
 
 eclipse {
@@ -72,4 +59,25 @@ eclipse {
 			}
 		}
 	}
+}
+
+publishing {
+    publications {
+        pluginPublication (MavenPublication) {
+            from        components.java
+            groupId     project.group
+            artifactId  project.name
+            version     project.version
+        }
+    }
+
+    repositories {
+        maven {
+            url mavenRepo
+            credentials {
+                username mavenUser
+                password mavenPassword
+            }
+        }
+    }
 }

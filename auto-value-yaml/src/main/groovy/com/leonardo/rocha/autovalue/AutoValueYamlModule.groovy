@@ -52,21 +52,21 @@ class AutoValueYamlModule {
         project.tasks.generateCodePlugin.dependsOn(project.tasks.cleanGenDirPlugin)
         project.tasks.compileJava.dependsOn(project.tasks.generateCodePlugin)
 
-        project.task("moveAutoValueCode") {
-            doFirst {
-                def autoValueFile = project.file("${project.getBuildDir()}/tmp/AutoValueFile.txt")
-                def line
-                autoValueFile.withReader { reader ->
-                    while ((line = reader.readLine()) != null) {
-                        def lineSplit = line.split(',')
-                        println "${lineSplit[0]} -> ${lineSplit[1]}"
-                        project.ant.copy file: "${lineSplit[0]}",todir: "${lineSplit[1]}"
-                    }
-                }
-            }
-        }  
-        project.tasks.build.dependsOn project.tasks.moveAutoValueCode
-        project.tasks.moveAutoValueCode.dependsOn project.tasks.compileJava
+//        project.task("moveAutoValueCode") {
+//            doFirst {
+//                def autoValueFile = project.file("${project.getBuildDir()}/tmp/AutoValueFile.txt")
+//                def line
+//                autoValueFile.withReader { reader ->
+//                    while ((line = reader.readLine()) != null) {
+//                        def lineSplit = line.split(',')
+//                        println "${lineSplit[0]} -> ${lineSplit[1]}"
+//                        project.ant.copy file: "${lineSplit[0]}",todir: "${lineSplit[1]}"
+//                    }
+//                }
+//            }
+//        }  
+//        project.tasks.build.dependsOn project.tasks.moveAutoValueCode
+//        project.tasks.moveAutoValueCode.dependsOn project.tasks.compileJava
         
     }
 
