@@ -1,0 +1,13 @@
+pluginManagement {
+  repositories {
+      mavenLocal()
+      gradlePluginPortal()
+      maven {
+          credentials {
+              username mavenUser
+              password mavenPassword
+          }
+          url mavenRepo
+    }
+  }
+}

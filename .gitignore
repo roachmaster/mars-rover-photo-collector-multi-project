@@ -4,6 +4,8 @@ build/
 .gradle/
 **/build/
 **/fileHashes/
+**/fileChanges/
+**/fileContent/
 **/javaCompile/
 **/taskHistory/
 **/buildOutputCleanup/

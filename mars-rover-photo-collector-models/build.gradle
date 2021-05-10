@@ -34,7 +34,6 @@ sourceSets {
     main {
         java {
             srcDirs generatedDir
-            srcDirs 'src/main/java'
 			srcDirs "${buildDir}/generated/sources/annotationProcessor/java/main"
         }
     }

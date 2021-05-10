@@ -11,18 +11,14 @@ buildscript {
 
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath("org.yaml:snakeyaml:1.17")
-        classpath('com.github.spullara.mustache.java:compiler:0.9.5')
     }
 }
 
 plugins {
-    id 'maven'
+    id 'maven-publish'
     id 'java'
     id 'eclipse'
 }
-
-project.ext.set("generatedDir","${buildDir}/generatecode/src/main/java")
 
 sourceCompatibility = 1.8
 
@@ -33,30 +29,29 @@ ext {
     okhttpVersion = '3.4.1'
 }
 
-apply from: "CodeGenerator.gradle"
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 sourceSets {
     main {
         java {
-            srcDirs generatedDir
             srcDirs 'src/main/java'
         }
     }
 }
 
 dependencies {
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.10.1'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.1'
+    implementation group: 'com.leonardo.rocha', name: 'mars-rover-photo-collector-models', version: '0.1.0'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.10.1'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.1'
 
-    compile "com.google.auto.value:auto-value-annotations:${autoValueVersion}"
+    implementation "com.google.auto.value:auto-value-annotations:${autoValueVersion}"
     annotationProcessor "com.google.auto.value:auto-value:${autoValueVersion}"
     annotationProcessor "com.google.auto.value:auto-value-annotations:${autoValueVersion}"
-    compile "com.google.auto.value:auto-value:${autoValueVersion}"
+    implementation "com.google.auto.value:auto-value:${autoValueVersion}"
 
-    compile "com.squareup.okhttp3:logging-interceptor:${okhttpVersion}"
-    compile "com.squareup.okhttp3:okhttp:${okhttpVersion}"
+    implementation "com.squareup.okhttp3:logging-interceptor:${okhttpVersion}"
+    implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
 
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
@@ -64,12 +59,12 @@ dependencies {
 
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
     testImplementation 'junit:junit:4.12'
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.6'
 
-    compile('org.springframework.boot:spring-boot-starter-web:2.2.4.RELEASE')
-    compile('org.apache.commons:commons-lang3:3.7')
-    testCompile('org.springframework.boot:spring-boot-starter-test:2.2.4.RELEASE')
+    implementation('org.springframework.boot:spring-boot-starter-web:2.2.4.RELEASE')
+    implementation('org.apache.commons:commons-lang3:3.7')
+    testImplementation('org.springframework.boot:spring-boot-starter-test:2.2.4.RELEASE')
 }
 
 repositories {
@@ -90,21 +85,21 @@ bootJar{
     }
 }
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: mavenRepo) {
-                authentication(userName: mavenUser, password: mavenPassword)
-            }
-            addFilter("springBoot") {artifact, file ->
-                artifact.name == project.name
-            }
-            pom('springBoot').version = version + "-SNAPSHOT"
-            pom('springBoot').artifactId = rootProject.name
-            pom('springBoot').groupId = groupId
-        }
-    }
-}
+//uploadArchives {
+//    repositories {
+//        mavenDeployer {
+//            repository(url: mavenRepo) {
+//                authentication(userName: mavenUser, password: mavenPassword)
+//            }
+//            addFilter("springBoot") {artifact, file ->
+//                artifact.name == project.name
+//            }
+//            pom('springBoot').version = version + "-SNAPSHOT"
+//            pom('springBoot').artifactId = rootProject.name
+//            pom('springBoot').groupId = groupId
+//        }
+//    }
+//}
 
 def getJenkinsBuildNumber(){
     def isSet = project.ext.has("jenkinsBuild") && project.ext.get("jenkinsBuild") != ""
