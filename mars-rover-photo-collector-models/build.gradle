@@ -1,26 +1,22 @@
-buildscript {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-
-    dependencies {
-        classpath "com.leonardo.rocha:auto-value-yaml:0.1.0"
-        classpath("org.yaml:snakeyaml:1.17")
-        classpath('com.github.spullara.mustache.java:compiler:0.9.5')
-    }
-}
-
 plugins {
     id 'maven'
     id 'java'
     id 'eclipse'
+    id "com.leonardo.rocha.AutoValueYamlPlugin" version '0.1.0'
 }
 
-apply plugin:"com.leonardo.rocha.AutoValueYamlPlugin"
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        credentials {
+            username mavenUser
+            password mavenPassword
+        }
+        url mavenRepo
+    }
+}
+
 project.ext.set("generatedDir","${buildDir}/generatecode/src/main/java")
 
 sourceCompatibility = 1.8
@@ -28,8 +24,15 @@ sourceCompatibility = 1.8
 ext {
     autoValueVersion = '1.7'
 }
+// * * * * * * * * * * * *
+// Project configuration
+// * * * * * * * * * * * *
 
-apply from: "CodeGenerator.gradle"
+project.description     = 'Demo plugin to use as a starting point for custom plugin development'
+project.group           = 'com.leonardo.rocha'
+project.version         = '0.1.0'
+
+project.ext.name        = 'mars-rover-photo-collector-models'
 
 sourceSets {
     main {
@@ -48,17 +51,6 @@ dependencies {
     annotationProcessor "com.google.auto.value:auto-value:${autoValueVersion}"
 }
 
-repositories {
-    mavenCentral()
-    maven {
-        credentials {
-            username mavenUser
-            password mavenPassword
-        }
-        url mavenRepo
-    }
-}
-
 uploadArchives {
     repositories {
         mavenDeployer {
@@ -67,16 +59,6 @@ uploadArchives {
             }
         }
     }
-}
-
-def getJenkinsBuildNumber(){
-    def isSet = project.ext.has("jenkinsBuild") && project.ext.get("jenkinsBuild") != ""
-    return isSet ? project.ext.jenkinsBuild : "fakeNumber"
-}
-
-def getJenkinsWorkspace(){
-    def isSet = project.ext.has("jenkinsWorkspace") && project.ext.get("jenkinsWorkspace") != ""
-    return isSet ? project.ext.jenkinsWorkspace : "fakeNumber"
 }
 
 eclipse {

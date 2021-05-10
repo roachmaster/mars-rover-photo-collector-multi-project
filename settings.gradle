@@ -1,6 +1,11 @@
+pluginManagement {
+  repositories {
+      mavenLocal()
+      gradlePluginPortal()
+  }
+}
 rootProject.name = 'mars-rover-photo-collector-multi-project'
 
-//include 'mars-rover-photo-collector-app'
-//include 'mars-rover-photo-collector-models'
 include 'auto-value-yaml'
-
+include 'mars-rover-photo-collector-models'
+//include 'mars-rover-photo-collector-app'

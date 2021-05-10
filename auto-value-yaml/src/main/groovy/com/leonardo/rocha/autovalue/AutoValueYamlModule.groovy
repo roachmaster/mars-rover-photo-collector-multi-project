@@ -51,6 +51,22 @@ class AutoValueYamlModule {
         project.apply plugin: 'java'
         project.tasks.generateCodePlugin.dependsOn(project.tasks.cleanGenDirPlugin)
         project.tasks.compileJava.dependsOn(project.tasks.generateCodePlugin)
+
+        project.task("moveAutoValueCode") {
+            doFirst {
+                def autoValueFile = project.file("${project.getBuildDir()}/tmp/AutoValueFile.txt")
+                def line
+                autoValueFile.withReader { reader ->
+                    while ((line = reader.readLine()) != null) {
+                        def lineSplit = line.split(',')
+                        println "${lineSplit[0]} -> ${lineSplit[1]}"
+                        project.ant.copy file: "${lineSplit[0]}",todir: "${lineSplit[1]}"
+                    }
+                }
+            }
+        }  
+        project.tasks.build.dependsOn project.tasks.moveAutoValueCode
+        project.tasks.moveAutoValueCode.dependsOn project.tasks.compileJava
         
     }
 
@@ -99,6 +115,7 @@ class AutoValueYamlModule {
     private static Tuple2 generateFile(def templateFile, def yamlFile){
         Map<String, Object> map = convertYamlToMap(yamlFile)
         Mustache mustache = compileTemplate(templateFile);
+        println(map)
         def generatedString = createTemplateInstance(mustache, map)
         def canonicalName = getGeneratedClassName(map)
         return new Tuple2(canonicalName, generatedString)
@@ -110,10 +127,9 @@ class AutoValueYamlModule {
         def yamlMap = (Map<String, Object>) yaml.load(input);
         def fieldList = yamlMap.get("fields")
         fieldList.each {
-            it.put("comma", "true")
+            it.put("comma", true)
         }
-        fieldList.last().put("comma", "false")
-        println fieldList
+        fieldList.last().put("comma", false)
         return yamlMap
     }
 
