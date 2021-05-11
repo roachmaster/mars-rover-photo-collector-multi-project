@@ -78,39 +78,6 @@ repositories {
     }
 }
 
-bootJar{
-    manifest{
-        attributes.put("Jenkins-Build", getJenkinsBuildNumber())
-        attributes.put("Jenkins-Workspace", getJenkinsWorkspace());
-    }
-}
-
-//uploadArchives {
-//    repositories {
-//        mavenDeployer {
-//            repository(url: mavenRepo) {
-//                authentication(userName: mavenUser, password: mavenPassword)
-//            }
-//            addFilter("springBoot") {artifact, file ->
-//                artifact.name == project.name
-//            }
-//            pom('springBoot').version = version + "-SNAPSHOT"
-//            pom('springBoot').artifactId = rootProject.name
-//            pom('springBoot').groupId = groupId
-//        }
-//    }
-//}
-
-def getJenkinsBuildNumber(){
-    def isSet = project.ext.has("jenkinsBuild") && project.ext.get("jenkinsBuild") != ""
-    return isSet ? project.ext.jenkinsBuild : "fakeNumber"
-}
-
-def getJenkinsWorkspace(){
-    def isSet = project.ext.has("jenkinsWorkspace") && project.ext.get("jenkinsWorkspace") != ""
-    return isSet ? project.ext.jenkinsWorkspace : "fakeNumber"
-}
-
 eclipse {
 	classpath {
 		defaultOutputDir = file("build")

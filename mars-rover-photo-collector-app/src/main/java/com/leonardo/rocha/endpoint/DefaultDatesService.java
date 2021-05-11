@@ -2,13 +2,16 @@ package com.leonardo.rocha.endpoint;
 
 import com.leonardo.rocha.endpoint.date.DateFormatter;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +20,7 @@ import java.util.List;
 public class DefaultDatesService implements DatesService {
 
     @Value("#{datesFileName}")
-    private String datesFileName;
+    private Resource datesFileName;
 
     private final Logger logger = LoggerFactory.getLogger(DatesService.class);
 
@@ -31,16 +34,18 @@ public class DefaultDatesService implements DatesService {
     @PostConstruct
     public void initializeDates() {
         try{
+        	logger.info("LEO LOOK:" + datesFileName);
             setDateList(datesFileName);
         } catch(IOException e) {
             logger.error("Error reading file {}", datesFileName, e.getStackTrace());
         }
     }
 
-    private void setDateList(String fileName) throws IOException {
+    private void setDateList(Resource resource) throws IOException {
         if(dateList.isEmpty()){
-            List<String> dates = FileUtils.readLines(new File(fileName),"utf-8");
-            formatDates(dates);
+        	InputStream istream = resource.getInputStream();
+            List<String> dates = IOUtils.readLines(istream, StandardCharsets.UTF_8);
+        	formatDates(dates);
         }
     }
 

@@ -4,10 +4,16 @@ import com.leonardo.rocha.api.MarsRoverRestApi;
 import com.leonardo.rocha.api.UrlImageDownloader;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
@@ -22,9 +28,15 @@ public class MarsImageAppConfiguration {
     @Value("${baseUrl:https://api.nasa.gov}")
     String baseUrl;
 
+//    @Bean
+//    public String datesFileName(@Value("${datesFileName:src/test/resources/imageDates.txt}") String datesFileName) {
+//        return datesFileName;
+//    }
+    
     @Bean
-    public String datesFileName(@Value("${datesFileName:src/test/resources/imageDates.txt}") String datesFileName) {
-        return datesFileName;
+    public Resource datesFileName(){
+    	return new ClassPathResource("imageDates.txt", this.getClass().getClassLoader());
+
     }
 
     @Bean
