@@ -20,6 +20,17 @@ plugins {
     id 'eclipse'
 }
 
+repositories {
+    mavenCentral()
+    maven {
+        credentials {
+            username mavenUser
+            password mavenPassword
+        }
+        url mavenRepo
+    }
+}
+
 sourceCompatibility = 1.8
 
 ext {
@@ -28,6 +39,11 @@ ext {
     autoValueVersion = '1.7'
     okhttpVersion = '3.4.1'
 }
+
+project.description     = 'Repo that creates the Models for the mars-rover app'
+project.group           = 'com.leonardo.rocha'
+project.version         = '0.1.0'
+project.ext.name        = 'mars-rover-photo-collector-app'
 
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
@@ -67,17 +83,6 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test:2.2.4.RELEASE')
 }
 
-repositories {
-    mavenCentral()
-    maven {
-        credentials {
-            username mavenUser
-            password mavenPassword
-        }
-        url mavenRepo
-    }
-}
-
 eclipse {
 	classpath {
 		defaultOutputDir = file("build")
@@ -89,4 +94,27 @@ eclipse {
 			}
 		}
 	}
+}
+publish {
+    dependsOn assemble
+}
+publishing {
+    publications {
+		bootJava(MavenPublication) {
+			artifact bootJar
+            groupId     project.group
+            artifactId  project.name
+            version     project.version
+		}
+    }
+
+    repositories {
+        maven {
+            url mavenRepo
+            credentials {
+                username mavenUser
+                password mavenPassword
+            }
+        }
+    }
 }
