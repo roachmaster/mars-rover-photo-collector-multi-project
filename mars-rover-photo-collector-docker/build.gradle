@@ -1,0 +1,58 @@
+plugins {
+    id 'maven-publish'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        credentials {
+            username mavenUser
+            password mavenPassword
+        }
+        url mavenRepo
+    }
+}
+
+configurations {
+    docker
+}
+
+ext {
+    jarVersion = "0.1.0"
+    jarArtifactId = "mars-rover-photo-collector-app"
+    jarGroupId = "com.leonardo.rocha"
+}
+
+dependencies {
+    docker "${jarGroupId}:${jarArtifactId}:${jarVersion}"
+}
+
+task copySpringBootJar(type: Copy){
+    from project.configurations.docker.resolvedConfiguration.resolvedArtifacts[0].file
+    into "${buildDir}/dockerStage"
+}
+
+task copyDockerFile(type:Copy){
+    dependsOn project.tasks.copySpringBootJar
+    from "${projectDir}/Dockerfile"
+    into "${buildDir}/dockerStage"
+}
+
+task docker(){
+    dependsOn project.tasks.copyDockerFile
+
+    def jarFileName
+    def dockerRepoName
+    def commandLineString
+
+    doLast{
+        exec {
+            workingDir("${buildDir}/dockerStage/")
+            jarFileName = "${jarArtifactId}-${jarVersion}.jar"
+            dockerRepoName = "${jarGroupId.replace(".", "/")}/${jarArtifactId}:${jarVersion}"
+            commandLineString = "docker build --build-arg JAR_FILE=${jarFileName} -t ${dockerRepoName} ."
+            commandLine commandLineString.split(" ")
+        }
+    }
+}
