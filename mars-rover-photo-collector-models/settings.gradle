@@ -11,3 +11,7 @@ pluginManagement {
     }
   }
 }
+
+rootProject.name = 'mars-rover-photo-collector-multi-project'
+
+include 'auto-value-yaml', 'mars-rover-photo-collector-models', 'mars-rover-photo-collector-app'
