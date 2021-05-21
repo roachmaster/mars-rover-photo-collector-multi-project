@@ -43,7 +43,6 @@ project.version         = '0.1.0'
 project.ext.name        = 'auto-value-yaml'
 project.ext.pluginId    = 'com.leonardo.rocha.AutoValueYamlPlugin'
 sourceCompatibility = 1.8
-// Configuration for: java-gradle-plugin
 gradlePlugin {
     plugins {
         simplePlugin {
