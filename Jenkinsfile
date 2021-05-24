@@ -1,2 +1,5 @@
-setUpGradleProjects 
-buildGradleProject( name: 'auto-value-yaml' )
+node {
+    stage("Setting Up Gradle Environment"){
+        setUpGradleProjects  
+    }
+}
