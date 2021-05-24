@@ -18,15 +18,15 @@ function listGradleProjects(){
 function copyGradleFilesToProject() {
     for f in * ;
         do isGradleProject $f &&
-           cp -r commonGradleFiles/* $f ;
+           cp -rfv commonGradleFiles/* $f ;
     done
 }
 
 function rmGradleFilesToProject() {
     for f in * ;
         do isGradleProject $f &&
-            rm -rf $f/gradle* && 
-	    rm -rf $f/.gradle;
+            rm -rfv $f/gradle* && 
+	    rm -rfv $f/.gradle;
     done
 }
 
