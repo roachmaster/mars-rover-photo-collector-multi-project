@@ -1,2 +1,2 @@
-setUpGradleProjects gradleDir: "commonGradleFiles"
-buildGradleProject name: "auto-value-yaml"
+setUpGradleProjects 
+buildGradleProject( name: 'auto-value-yaml' )
