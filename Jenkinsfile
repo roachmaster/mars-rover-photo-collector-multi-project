@@ -1,3 +1,1 @@
-javaBuild(this){
-    //test
-}
+setUpGradleProjects gradleDir: "commonGradleFiles"
