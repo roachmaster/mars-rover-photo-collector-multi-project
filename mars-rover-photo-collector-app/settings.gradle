@@ -1,16 +1,1 @@
-pluginManagement {
-  repositories {
-      mavenLocal()
-      gradlePluginPortal()
-      maven {
-          credentials {
-              username mavenUser
-              password mavenPassword
-          }
-          url mavenRepo
-    }
-  }
-}
-
 rootProject.name = 'mars-rover-photo-collector-app'
-

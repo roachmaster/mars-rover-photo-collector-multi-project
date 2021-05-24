@@ -1,7 +1,7 @@
 #!/bin/bash
 source ./scripts/commonScriptFunctions.sh
 
-function setUpEclipseProject() {
+function cleanEclipseProject() {
     currentDir=$(pwd)
 
     for f in * ; 
@@ -11,15 +11,13 @@ function setUpEclipseProject() {
 	    pwd
 	    if isEclipseProject; then
 	        ./gradlew clean cleanEclipse
-	        ./gradlew build eclipse
+		rm -rvf bin
             fi
 	    cd $currentDir
 	fi
     done
 }
 
-echo Setting up the following projects for gradle
+echo Cleaning up the following Eclipse projects
 listGradleProjects
-rmGradleFilesToProject
-copyGradleFilesToProject
-setUpEclipseProject
+cleanEclipseProject

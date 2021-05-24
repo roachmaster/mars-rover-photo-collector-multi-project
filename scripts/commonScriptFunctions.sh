@@ -4,6 +4,10 @@ function isGradleProject(){
     [[ -d "$1" && "$1" != "commonGradleFiles" && "$1" != "scripts" ]]
 }
 
+function isEclipseProject(){
+    grep -q eclipse build.gradle
+}
+
 function listGradleProjects(){
     for f in * ;
         do isGradleProject $f && 
@@ -21,7 +25,8 @@ function copyGradleFilesToProject() {
 function rmGradleFilesToProject() {
     for f in * ;
         do isGradleProject $f &&
-            rm -rf $f/gradle* ;
+            rm -rf $f/gradle* && 
+	    rm -rf $f/.gradle;
     done
 }
 

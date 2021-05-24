@@ -83,18 +83,19 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test:2.2.4.RELEASE')
 }
 
-eclipse {
-	classpath {
-		defaultOutputDir = file("build")
-		file.whenMerged {
-			entries.each { entry ->
-				if(entry.kind == 'src' && entry.hasProperty('output')) {
-					entry.output = entry.output.replace('bin/', "build/classes/java/")
-				}
-			}
-		}
-	}
-}
+//eclipse {
+//	classpath {
+//		defaultOutputDir = file("build")
+//		file.whenMerged {
+//			entries.each { entry ->
+//				if(entry.kind == 'src' && entry.hasProperty('output')) {
+//					entry.output = entry.output.replace('bin/', "build/classes/java/")
+//				}
+//			}
+//		}
+//	}
+//}
+
 publish {
     dependsOn assemble
 }

@@ -11,7 +11,7 @@ plugins {
 
     // Publishing to Artifactory
     id 'maven-publish'
-	id 'eclipse'
+    id 'eclipse'
 }
 
 // * * * * * * * * * * * *
@@ -76,12 +76,14 @@ eclipse {
 	classpath {
 		defaultOutputDir = file("build")
 		file.whenMerged {
+			//entries.removeAll{
+			//	it.kind == "src" && it.hasProperty('output') && it.output.toString().contains("bin/")
+			//}
 			entries.each { entry ->
 				if(entry.kind == 'src' && entry.hasProperty('output')) {
-					entry.output = entry.output.replace('bin/', "build/classes/java/")
+					entry.output = entry.output.replace('bin', "build/classes/groovy")
 				}
 			}
 		}
 	}
 }
-
