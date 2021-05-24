@@ -39,7 +39,7 @@ task copyDockerFile(type:Copy){
     into "${buildDir}/dockerStage"
 }
 
-task docker(){
+task build(){
     dependsOn project.tasks.copyDockerFile
 
     def jarFileName
@@ -50,7 +50,7 @@ task docker(){
         exec {
             workingDir("${buildDir}/dockerStage/")
             jarFileName = "${jarArtifactId}-${jarVersion}.jar"
-            dockerRepoName = "${jarGroupId.replace(".", "/")}/${jarArtifactId}:${jarVersion}"
+            dockerRepoName = "leonardorocha1990/${jarArtifactId}:${jarVersion}"
             commandLineString = "docker build --build-arg JAR_FILE=${jarFileName} -t ${dockerRepoName} ."
             commandLine commandLineString.split(" ")
         }

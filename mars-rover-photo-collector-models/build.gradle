@@ -45,6 +45,8 @@ jar {
 }
 
 dependencies {
+	implementation group: 'javax.annotation', name: 'javax.annotation-api', version: '1.3.2'
+	
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.10.1'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.1'
 
@@ -52,21 +54,6 @@ dependencies {
     annotationProcessor "com.google.auto.value:auto-value:${autoValueVersion}"
 }
 
-//eclipse {
-//	classpath {
-//		defaultOutputDir = file("build")
-//		file.whenMerged {
-//			entries.removeAll{
-//				it.kind == "src" && it.hasProperty('output') && it.output.toString().contains("bin/")
-//			}
-//			entries.each { entry ->
-//				if(entry.kind == 'src' && entry.hasProperty('output')) {
-//					entry.output = entry.output.replace('bin/', "build/classes/java/")
-//				}
-//			}
-//		}
-//	}
-//}
 
 publishing {
     publications {

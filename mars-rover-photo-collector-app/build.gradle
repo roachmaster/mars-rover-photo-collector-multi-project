@@ -40,7 +40,7 @@ ext {
     okhttpVersion = '3.4.1'
 }
 
-project.description     = 'Repo that creates the Models for the mars-rover app'
+project.description     = 'Repo that creates the mars-rover app'
 project.group           = 'com.leonardo.rocha'
 project.version         = '0.1.0'
 project.ext.name        = 'mars-rover-photo-collector-app'
@@ -83,22 +83,10 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test:2.2.4.RELEASE')
 }
 
-//eclipse {
-//	classpath {
-//		defaultOutputDir = file("build")
-//		file.whenMerged {
-//			entries.each { entry ->
-//				if(entry.kind == 'src' && entry.hasProperty('output')) {
-//					entry.output = entry.output.replace('bin/', "build/classes/java/")
-//				}
-//			}
-//		}
-//	}
-//}
-
 publish {
     dependsOn assemble
 }
+
 publishing {
     publications {
 		bootJava(MavenPublication) {
