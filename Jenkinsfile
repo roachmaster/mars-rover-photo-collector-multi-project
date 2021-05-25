@@ -6,4 +6,7 @@ node {
     stage("Building ${project} gradle project"){
         buildGradleProject name: project
     }
+    stage("Publishing ${project} maven artifacts"){
+        publishMavenArtifacts name: project
+    }
 }
