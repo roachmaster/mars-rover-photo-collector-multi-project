@@ -39,7 +39,7 @@ task copyDockerFile(type:Copy){
     into "${buildDir}/dockerStage"
 }
 
-task build(){
+task docker(){
     dependsOn project.tasks.copyDockerFile
 
     def jarFileName
