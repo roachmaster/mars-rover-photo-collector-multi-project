@@ -27,6 +27,9 @@ ext {
 dependencies {
     docker "${jarGroupId}:${jarArtifactId}:${jarVersion}"
 }
+task clean(){
+    delete "${buildDir}"
+}
 
 task copySpringBootJar(type: Copy){
     from project.configurations.docker.resolvedConfiguration.resolvedArtifacts[0].file
