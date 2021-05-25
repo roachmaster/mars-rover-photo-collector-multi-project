@@ -16,4 +16,11 @@ node {
     stage("Publishing ${project} maven artifacts"){
         publishMavenArtifacts name: project
     }
+    project = "mars-rover-photo-collector-app"
+    stage("Building ${project} gradle project"){
+        buildGradleProject name: project
+    }
+    stage("Publishing ${project} maven artifacts"){
+        publishMavenArtifacts name: project
+    }
 }
