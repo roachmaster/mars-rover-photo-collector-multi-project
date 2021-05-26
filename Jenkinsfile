@@ -24,7 +24,8 @@ node {
         publishMavenArtifacts name: project
     }
     project = "mars-rover-photo-collector-docker"
-    stage("Building ${project} docker image"){
+    stage("Building and Pushing ${project} docker image"){
         buildDockerProject name: project
+        pushDockerImage name: project
     }
 }

@@ -59,3 +59,34 @@ task docker(){
         }
     }
 }
+
+task dockerLogout(){
+    def commandLineString 
+    doLast {
+        exec {
+            commandLineString = "docker logout"
+            commandLine commandLineString.split(" ")
+        }
+    }
+}
+
+task dockerLogin(){
+    dependsOn project.tasks.dockerLogout
+    def commandLineString 
+    exec {
+        commandLineString = "docker login --username ${dockerUser} --password ${dockerPassword}"
+        commandLine commandLineString.split(" ")
+    }
+}
+
+task dockerPush(){
+    def dockerRepoName
+    def commandLineString 
+    doLast{
+        exec {
+            dockerRepoName = "leonardorocha1990/${jarArtifactId}:${jarVersion}"
+            commandLineString = "docker push ${dockerRepoName}"
+            commandLine commandLineString.split(" ")
+        }
+    }
+} 
